@@ -238,7 +238,47 @@ docker compose up -d
 
 # Estructura del proyecto
 
-(Dejar exactamente el árbol que tienes actualmente)
+```
+qa-automation-avl/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                  # Pipeline CI (API + eventos Kafka)
+├── app/
+│   └── Android-MyDemoApp.apk       # APK de la app bajo prueba
+├── config/
+│   ├── reporting.py                # Rutas de reportes y evidencias
+│   └── settings.py                 # Configuracion global (Appium, device)
+├── mobile/                         # Capa Movil (Appium + POM)
+│   ├── locators/                   # Selectores estables (accessibilityId/UiAutomator)
+│   ├── pages/                      # Page Objects (base, login, home, cart, checkout...)
+│   ├── payloads/                   # Datos de prueba (checkout)
+│   ├── tests/                      # Tests: login, navegacion, carrito, checkout, producto
+│   ├── utils/                      # Driver factory, helpers y evidencias
+│   └── conftest.py                 # Fixtures del driver + evidencias mobile
+├── api_tests/                      # Capa API (requests + jsonschema)
+│   ├── client/                     # Cliente HTTP reutilizable
+│   ├── config/                     # URLs, endpoints y SLA
+│   ├── helpers/                    # Aserciones, schema, SLA y evidencias
+│   ├── payloads/                   # Datos de prueba (auth, posts)
+│   ├── schemas/                    # JSON Schemas por dominio
+│   ├── tests/                      # Tests: auth, posts (POST/PUT/GET/SLA)
+│   └── conftest.py                 # Fixtures por servicio + evidencias API
+├── event_tests/                    # Capa Eventos/Telemetria (Kafka - bonus)
+│   ├── client/                     # Productor + consumidor Kafka (kafka-python)
+│   ├── config/                     # Broker, topic gps-raw-events, SLA
+│   ├── helpers/                    # Aserciones de contrato/integridad y evidencias
+│   ├── payloads/                   # Constructor del evento de telemetria GPS
+│   ├── schemas/                    # JSON Schema del evento
+│   ├── tests/                      # Tests: produce->consume, contrato, SLA, integridad
+│   ├── conftest.py                 # Fixtures producer/consumer + evidencias
+│   └── requirements-events.txt     # Dependencia del cliente Kafka
+├── conftest.py                     # Hooks globales de pytest
+├── docker-compose.yml              # Kafka local ligero (Redpanda)
+├── pytest.ini                      # Configuracion de pytest (testpaths, markers, reportes)
+├── requirements.txt                # Dependencias del proyecto
+├── README.md
+└── AI_USAGE.md
+```
 
 ---
 
