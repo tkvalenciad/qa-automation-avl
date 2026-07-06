@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Cancela ejecuciones anteriores del mismo branch si llega un push nuevo.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Capa API: corre contra APIs publicas (JSONPlaceholder / DummyJSON).
+  # ---------------------------------------------------------------------------
+  api-tests:
+    name: API tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Ejecutar pruebas API
+        run: pytest api_tests/tests -v
+
+      - name: Subir reportes (API)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-reports
+          path: |
+            reports/
+            allure-results/
+          if-no-files-found: ignore
+
+  # ---------------------------------------------------------------------------
+  # Capa Eventos: levanta Kafka (Redpanda) con docker compose y valida
+  # el flujo produce -> consume de telemetria GPS.
+  # ---------------------------------------------------------------------------
+  event-tests:
+    name: Event/Kafka tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: |
+          pip install -r requirements.txt
+          pip install -r event_tests/requirements-events.txt
+
+      - name: Levantar Kafka (Redpanda)
+        run: docker compose up -d
+
+      - name: Esperar a que el broker este sano
+        run: |
+          for i in $(seq 1 30); do
+            status=$(docker inspect -f '{{.State.Health.Status}}' qa-kafka 2>/dev/null || echo "starting")
+            echo "Intento $i: $status"
+            if [ "$status" = "healthy" ]; then exit 0; fi
+            sleep 3
+          done
+          echo "El broker no llego a estado healthy"
+          docker compose logs
+          exit 1
+
+      - name: Ejecutar pruebas de eventos
+        run: pytest event_tests/tests -v
+
+      - name: Apagar Kafka
+        if: always()
+        run: docker compose down
+
+      - name: Subir reportes (eventos)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: event-reports
+          path: |
+            reports/
+            allure-results/
+          if-no-files-found: ignore
