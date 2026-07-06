@@ -9,7 +9,6 @@ _last_event_exchange = {}
 
 
 def record_event_exchange(topic, produced, consumed, metadata=None, latency_seconds=None):
-    """Guarda el ultimo intercambio produce/consume para adjuntarlo como evidencia."""
     _last_event_exchange.clear()
     _last_event_exchange.update(
         {
