@@ -35,6 +35,29 @@ Actualmente la suite cuenta con **17 pruebas automatizadas**:
 
 
 
+# Estrategia de priorización por riesgo
+
+En AVL se gestionan miles de eventos telemáticos en tiempo real, por lo que la automatización se priorizó según el **riesgo de negocio** y el **impacto al usuario**: primero los flujos cuya falla detiene la operación o genera pérdida de datos/ingresos, y después los de menor severidad.
+
+| Prioridad | Riesgo de negocio | Caso automatizado | Capa | Por qué se priorizó |
+| --------- | ----------------- | ----------------- | ---- | ------------------- |
+| **P0 (crítico)** | Un usuario no puede acceder → bloquea toda la operación | Login válido / inválido | Mobile | Es la puerta de entrada; si falla, ningún otro flujo es alcanzable. Además valida manejo de credenciales incorrectas (seguridad). |
+| **P0 (crítico)** | Pérdida de eventos de telemetría → datos de flota incompletos | Integridad Produce → Consume + contrato JSON | Eventos | El core del negocio es ingerir telemetría sin pérdida ni corrupción; se valida que lo publicado se recibe íntegro y con la estructura esperada. |
+| **P1 (alto)** | El usuario no completa una compra → pérdida de ingreso | Agregar al carrito + Checkout hasta pago | Mobile | Flujo transaccional que cambia estado; se asegura la confirmación lógica del cambio (item agregado, avance a pago). |
+| **P1 (alto)** | Datos mal escritos/validados en backend | POST / PUT + validación de estado y JSON Schema | API | Las peticiones mutables con contrato garantizan que la ingesta de datos respete tipos y estructura. |
+| **P2 (medio)** | Degradación de experiencia / SLA | SLA API (<1.5s) + latencia de eventos | API / Eventos | En tiempo real la latencia importa; se valida rendimiento como parte del contrato, no solo la funcionalidad. |
+| **P2 (medio)** | Rupturas de navegación tras cambios de UI | Navegación entre pantallas + detalle de producto | Mobile | Verifica transiciones y estados intermedios usando selectores estables para mitigar flakiness. |
+
+**Decisiones clave de priorización:**
+
+- **Foco en Mobile (35% del peso):** mayor inversión en robustez (esperas dinámicas, POM, selectores estables) por ser la capa de mayor peso y mayor fragilidad.
+- **Contrato + integridad antes que volumen:** se prefirió validar profundamente los flujos críticos (contrato, integridad, SLA) en lugar de multiplicar casos superficiales.
+- **Reproducibilidad en CI:** las capas API y Eventos corren en CI (deterministas); Mobile se ejecuta localmente por requerir hardware físico, evitando falsos negativos.
+
+---
+
+
+
 # Integración Continua (CI)
 
 El proyecto incluye un pipeline de **GitHub Actions** (`.github/workflows/ci.yml`) que se ejecuta automáticamente en cada `push` y `pull request` sobre la rama `main`.
