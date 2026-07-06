@@ -17,6 +17,8 @@ Este documento describe de forma transparente cómo utilicé asistentes de Intel
 
 ---
 
+
+
 # 2. Casos de uso específicos
 
 Durante el desarrollo utilicé la IA principalmente como apoyo para tareas repetitivas o de análisis, entre ellas:
@@ -35,7 +37,11 @@ En todos los casos, el código generado fue revisado, adaptado y validado manual
 
 ---
 
+
+
 # 3. Ejemplos de prompts utilizados
+
+
 
 ## Prompt 1 – Diseñar la capa de eventos
 
@@ -63,6 +69,8 @@ Este prompt permitió construir la estructura inicial de la capa de eventos y co
 
 ---
 
+
+
 ## Prompt 2 – Validar el cumplimiento del reto
 
 **Contexto**
@@ -83,6 +91,8 @@ Gracias a este prompt detecté que la primera propuesta modelaba un escenario de
 
 ---
 
+
+
 # 4. Reflexión técnica
 
 El uso de IA tuvo un impacto importante en la velocidad de desarrollo, especialmente en tareas repetitivas como la generación de boilerplate, la organización inicial del proyecto, la creación de esquemas JSON y la documentación.
@@ -92,4 +102,3 @@ Sin embargo, todas las decisiones de arquitectura y las validaciones finales fue
 Uno de los aprendizajes más importantes fue que la IA no reemplaza el criterio de ingeniería. Por ejm, fue necesario corregir sugerencias relacionadas con selectores móviles, descartando varios XPath propuestos inicialmente en favor de `accessibilityId` y `UiAutomator`, que resultaron mucho más estables al ejecutar las pruebas sobre un dispositivo físico.
 
 En resumen, la IA me permitió acelerar el desarrollo y reducir el tiempo dedicado a tareas repetitivas, pero el resultado final dependió del análisis crítico, las validaciones manuales y la ejecución continua de las pruebas para asegurar que la solución cumpliera realmente con los requisitos planteados.
-

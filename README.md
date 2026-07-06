@@ -52,39 +52,26 @@ Actualmente la suite cuenta con **17 pruebas automatizadas**:
 
 # Prerrequisitos
 
-Antes de ejecutar el proyecto es necesario tener instalado:
+El proyecto fue desarrollado y validado utilizando estas versiones:
 
--  Python 3.10 o superior 
--  Java JDK 11+ 
--  Node.js 18+ 
--  Android Studio + Android SDK 
--  Appium Server 2.x 
--  Docker Desktop (para la suite de eventos) 
--  WSL2 habilitado (Windows) 
--  Un dispositivo Android físico o un emulador 
 
-El proyecto fue desarrollado y validado utilizando estas versiones exactas:
+| Herramienta                      | Versión usada                   |
+| -------------------------------- | ------------------------------- |
+| Python                           | 3.12.10                         |
+| Java JDK                         | 21.0.2 LTS                      |
+| Node.js                          | 20.11.0 (npm 10.2.4)            |
+| Appium Server                    | 2.19.0                          |
+| Appium driver UiAutomator2       | 3.9.7                           |
+| Android SDK platform-tools (adb) | 37.0.0 (adb 1.0.41)             |
+| Appium-Python-Client             | 5.3.1                           |
+| Dispositivo                      | Samsung Galaxy S25 (Android 16) |
 
-| Herramienta | Versión usada |
-| ----------- | ------------- |
-| Python | 3.12.10 |
-| Java JDK | 21.0.2 LTS |
-| Node.js | 20.11.0 (npm 10.2.4) |
-| Appium Server | 2.19.0 |
-| Appium driver UiAutomator2 | 3.9.7 |
-| Android SDK platform-tools (adb) | 37.0.0 (adb 1.0.41) |
-| Appium-Python-Client | 5.3.1 |
-| Dispositivo | Samsung Galaxy S25 (Android 16) |
 
 ---
 
 # Variables de entorno
 
 Configurar las siguientes variables:
-
-```
-
-```
 
 ```
 $env:ANDROID_HOME="C:\Users\<usuario>\AppData\Local\Android\Sdk"
@@ -101,10 +88,6 @@ $env:DUMMYJSON_URL="https://dummyjson.com"
 Para la suite de eventos también pueden configurarse:
 
 ```
-
-```
-
-```
 $env:KAFKA_BOOTSTRAP_SERVERS="localhost:9092"
 
 $env:GPS_RAW_EVENTS_TOPIC="gps-raw-events"
@@ -117,10 +100,6 @@ $env:GPS_RAW_EVENTS_TOPIC="gps-raw-events"
 ## 1. Clonar el repositorio
 
 ```
-
-```
-
-```
 git clone <url>
 
 cd qa-automation-avl
@@ -129,10 +108,6 @@ cd qa-automation-avl
 ---
 
 ## 2. Crear el entorno virtual
-
-```
-
-```
 
 ```
 python -m venv .venv
@@ -145,18 +120,10 @@ python -m venv .venv
 Windows
 
 ```
-
-```
-
-```
 .venv\Scripts\activate
 ```
 
 Linux / Mac
-
-```
-
-```
 
 ```
 source .venv/bin/activate
@@ -167,20 +134,12 @@ source .venv/bin/activate
 ## 4. Instalar dependencias
 
 ```
-
-```
-
-```
 pip install -r requirements.txt
 ```
 
 ---
 
 ## 5. Instalar Appium
-
-```
-
-```
 
 ```
 npm install -g appium
@@ -193,18 +152,10 @@ appium driver install uiautomator2
 ## 6. Verificar el dispositivo Android
 
 ```
-
-```
-
-```
 adb devices
 ```
 
 Debe aparecer algo similar a:
-
-```
-
-```
 
 ```
 List of devices attached
@@ -217,10 +168,6 @@ RFCY510RLSL device
 ## 7. Levantar Appium
 
 ```
-
-```
-
-```
 appium
 ```
 
@@ -229,20 +176,12 @@ appium
 ## 8. Instalar la aplicación (si es necesario)
 
 ```
-
-```
-
-```
 adb install Android-MyDemoApp.apk
 ```
 
 ---
 
 ## 9. Levantar Kafka (solo suite de eventos)
-
-```
-
-```
 
 ```
 docker compose up -d
@@ -261,20 +200,12 @@ docker compose up -d
 ## Ejecutar toda la suite
 
 ```
-
-```
-
-```
 pytest -v
 ```
 
 ---
 
 ## Ejecutar únicamente Mobile
-
-```
-
-```
 
 ```
 pytest mobile/tests -v
@@ -285,20 +216,12 @@ pytest mobile/tests -v
 ## Ejecutar únicamente API
 
 ```
-
-```
-
-```
 pytest api_tests/tests -v
 ```
 
 ---
 
 ## Ejecutar únicamente Eventos
-
-```
-
-```
 
 ```
 pytest event_tests/tests -v
@@ -323,10 +246,6 @@ Después de cada ejecución se generan automáticamente:
 ---
 
 ## Abrir reporte Allure
-
-```
-
-```
 
 ```
 allure serve allure-results
@@ -395,7 +314,7 @@ allure serve allure-results
 
 # Consideraciones
 
--  La suite Mobile requiere un dispositivo Android conectado y Appium Server en ejecución. 
--  La suite de Eventos requiere un broker Kafka disponible. Si el broker no está accesible, las pruebas se omiten automáticamente (`pytest.skip`) sin afectar el resto de la ejecución. 
--  Todas las evidencias se generan automáticamente para facilitar el análisis de resultados.
+- La suite Mobile requiere un dispositivo Android conectado y Appium Server en ejecución. 
+- La suite de Eventos requiere un broker Kafka disponible. Si el broker no está accesible, las pruebas se omiten automáticamente (`pytest.skip`) sin afectar el resto de la ejecución. 
+- Todas las evidencias se generan automáticamente para facilitar el análisis de resultados.
 
