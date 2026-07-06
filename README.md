@@ -1,5 +1,7 @@
 # PRUEBA TÉCNICA: INGENIERO DE AUTOMATIZACIÓN QA - AVL Mobility Solutions
 
+![CI](https://github.com/tkvalenciad/qa-automation-avl/actions/workflows/ci.yml/badge.svg)
+
 ## Descripción
 
 Este proyecto corresponde a la prueba técnica para **AVL Mobility Solutions**.
@@ -28,6 +30,21 @@ Actualmente la suite cuenta con **17 pruebas automatizadas**:
 
 17 passed
 ```
+
+---
+
+# Integración Continua (CI)
+
+El proyecto incluye un pipeline de **GitHub Actions** (`.github/workflows/ci.yml`) que se ejecuta automáticamente en cada `push` y `pull request` sobre la rama `main`.
+
+En cada ejecución el pipeline:
+
+- Instala las dependencias en un entorno limpio (Python 3.12).
+- Ejecuta la **suite de API** contra los servicios públicos.
+- Levanta un broker **Kafka (Redpanda)** con `docker compose` y ejecuta la **suite de eventos** (produce → consume de telemetría).
+- Publica los reportes (`reports/`, `allure-results/`) como *artifacts* descargables.
+
+La **capa Mobile no se ejecuta en CI** de forma intencional, ya que requiere un dispositivo Android físico y Appium Server, por lo que se ejecuta localmente. De esta manera el pipeline valida de forma continua las capas reproducibles en la nube (API y eventos) sin introducir falsos negativos por falta de hardware.
 
 ---
 
