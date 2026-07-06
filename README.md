@@ -1,7 +1,5 @@
 # PRUEBA TÉCNICA: INGENIERO DE AUTOMATIZACIÓN QA - AVL Mobility Solutions
 
-![CI](https://github.com/tkvalenciad/qa-automation-avl/actions/workflows/ci.yml/badge.svg)
-
 ## Descripción
 
 Este proyecto corresponde a la prueba técnica para **AVL Mobility Solutions**.
@@ -33,31 +31,6 @@ Actualmente la suite cuenta con **17 pruebas automatizadas**:
 
 ---
 
-
-
-# Estrategia de priorización por riesgo
-
-En AVL se gestionan miles de eventos telemáticos en tiempo real, por lo que la automatización se priorizó según el **riesgo de negocio** y el **impacto al usuario**: primero los flujos cuya falla detiene la operación o genera pérdida de datos/ingresos, y después los de menor severidad.
-
-| Prioridad | Riesgo de negocio | Caso automatizado | Capa | Por qué se priorizó |
-| --------- | ----------------- | ----------------- | ---- | ------------------- |
-| **P0 (crítico)** | Un usuario no puede acceder → bloquea toda la operación | Login válido / inválido | Mobile | Es la puerta de entrada; si falla, ningún otro flujo es alcanzable. Además valida manejo de credenciales incorrectas (seguridad). |
-| **P0 (crítico)** | Pérdida de eventos de telemetría → datos de flota incompletos | Integridad Produce → Consume + contrato JSON | Eventos | El core del negocio es ingerir telemetría sin pérdida ni corrupción; se valida que lo publicado se recibe íntegro y con la estructura esperada. |
-| **P1 (alto)** | El usuario no completa una compra → pérdida de ingreso | Agregar al carrito + Checkout hasta pago | Mobile | Flujo transaccional que cambia estado; se asegura la confirmación lógica del cambio (item agregado, avance a pago). |
-| **P1 (alto)** | Datos mal escritos/validados en backend | POST / PUT + validación de estado y JSON Schema | API | Las peticiones mutables con contrato garantizan que la ingesta de datos respete tipos y estructura. |
-| **P2 (medio)** | Degradación de experiencia / SLA | SLA API (<1.5s) + latencia de eventos | API / Eventos | En tiempo real la latencia importa; se valida rendimiento como parte del contrato, no solo la funcionalidad. |
-| **P2 (medio)** | Rupturas de navegación tras cambios de UI | Navegación entre pantallas + detalle de producto | Mobile | Verifica transiciones y estados intermedios usando selectores estables para mitigar flakiness. |
-
-**Decisiones clave de priorización:**
-
-- **Foco en Mobile (35% del peso):** mayor inversión en robustez (esperas dinámicas, POM, selectores estables) por ser la capa de mayor peso y mayor fragilidad.
-- **Contrato + integridad antes que volumen:** se prefirió validar profundamente los flujos críticos (contrato, integridad, SLA) en lugar de multiplicar casos superficiales.
-- **Reproducibilidad en CI:** las capas API y Eventos corren en CI (deterministas); Mobile se ejecuta localmente por requerir hardware físico, evitando falsos negativos.
-
----
-
-
-
 # Integración Continua (CI)
 
 El proyecto incluye un pipeline de **GitHub Actions** (`.github/workflows/ci.yml`) que se ejecuta automáticamente en cada `push` y `pull request` sobre la rama `main`.
@@ -72,8 +45,6 @@ En cada ejecución el pipeline:
 La **capa Mobile no se ejecuta en CI** de forma intencional, ya que requiere un dispositivo Android físico y Appium Server, por lo que se ejecuta localmente. De esta manera el pipeline valida de forma continua las capas reproducibles en la nube (API y eventos) sin introducir falsos negativos por falta de hardware.
 
 ---
-
-
 
 # Tecnologías utilizadas
 
@@ -94,8 +65,6 @@ La **capa Mobile no se ejecuta en CI** de forma intencional, ya que requiere un 
 
 ---
 
-
-
 # Prerrequisitos
 
 El proyecto fue desarrollado y validado utilizando estas versiones:
@@ -114,8 +83,6 @@ El proyecto fue desarrollado y validado utilizando estas versiones:
 
 
 ---
-
-
 
 # Variables de entorno
 
@@ -143,11 +110,7 @@ $env:GPS_RAW_EVENTS_TOPIC="gps-raw-events"
 
 ---
 
-
-
 # Instalación paso a paso
-
-
 
 ## 1. Clonar el repositorio
 
@@ -159,8 +122,6 @@ cd qa-automation-avl
 
 ---
 
-
-
 ## 2. Crear el entorno virtual
 
 ```
@@ -168,8 +129,6 @@ python -m venv .venv
 ```
 
 ---
-
-
 
 ## 3. Activarlo
 
@@ -187,8 +146,6 @@ source .venv/bin/activate
 
 ---
 
-
-
 ## 4. Instalar dependencias
 
 ```
@@ -196,8 +153,6 @@ pip install -r requirements.txt
 ```
 
 ---
-
-
 
 ## 5. Instalar Appium
 
@@ -208,8 +163,6 @@ appium driver install uiautomator2
 ```
 
 ---
-
-
 
 ## 6. Verificar el dispositivo Android
 
@@ -227,8 +180,6 @@ RFCY510RLSL device
 
 ---
 
-
-
 ## 7. Levantar Appium
 
 ```
@@ -236,8 +187,6 @@ appium
 ```
 
 ---
-
-
 
 ## 8. Instalar la aplicación (si es necesario)
 
@@ -247,8 +196,6 @@ adb install Android-MyDemoApp.apk
 
 ---
 
-
-
 ## 9. Levantar Kafka (solo suite de eventos)
 
 ```
@@ -256,8 +203,6 @@ docker compose up -d
 ```
 
 ---
-
-
 
 # Estructura del proyecto
 
@@ -305,11 +250,7 @@ qa-automation-avl/
 
 ---
 
-
-
 # Ejecución de pruebas
-
-
 
 ## Ejecutar toda la suite
 
@@ -319,8 +260,6 @@ pytest -v
 
 ---
 
-
-
 ## Ejecutar únicamente Mobile
 
 ```
@@ -328,8 +267,6 @@ pytest mobile/tests -v
 ```
 
 ---
-
-
 
 ## Ejecutar únicamente API
 
@@ -339,8 +276,6 @@ pytest api_tests/tests -v
 
 ---
 
-
-
 ## Ejecutar únicamente Eventos
 
 ```
@@ -348,8 +283,6 @@ pytest event_tests/tests -v
 ```
 
 ---
-
-
 
 # Reportes
 
@@ -367,8 +300,6 @@ Después de cada ejecución se generan automáticamente:
 
 ---
 
-
-
 ## Abrir reporte Allure
 
 ```
@@ -377,11 +308,7 @@ allure serve allure-results
 
 ---
 
-
-
 # Cobertura implementada
-
-
 
 ### Mobile
 
@@ -399,8 +326,6 @@ allure serve allure-results
 
 ---
 
-
-
 ### API
 
 ✔ POST
@@ -414,8 +339,6 @@ allure serve allure-results
 ✔ SLA
 
 ---
-
-
 
 ### Eventos
 
@@ -433,8 +356,6 @@ allure serve allure-results
 
 ---
 
-
-
 # Credenciales de prueba
 
 
@@ -445,8 +366,6 @@ allure serve allure-results
 
 
 ---
-
-
 
 # Consideraciones
 
