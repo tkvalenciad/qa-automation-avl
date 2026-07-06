@@ -12,8 +12,6 @@ from event_tests.config.settings import (
     PRODUCE_TIMEOUT_SECONDS,
 )
 
-# Import perezoso del cliente kafka-python. Si la libreria no esta instalada no
-# rompemos la coleccion de pytest: los tests haran skip con un mensaje claro.
 try:
     from kafka import KafkaConsumer, KafkaProducer
     from kafka.errors import KafkaError, NoBrokersAvailable
@@ -26,11 +24,10 @@ except Exception as exc:  # pragma: no cover - solo si falta la dependencia
 
 
 class KafkaUnavailable(Exception):
-    """Se lanza cuando el cliente o el broker Kafka no estan disponibles."""
+    pass
 
 
 def _security_config():
-    """Config SASL/SSL opcional para brokers gestionados en la nube."""
     if not KAFKA_SECURITY_PROTOCOL:
         return {}
 
@@ -47,7 +44,6 @@ def _bootstrap_list(bootstrap):
 
 
 class TelemetryProducer:
-    """Productor de eventos de telemetria hacia un topico Kafka."""
 
     def __init__(self, bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS):
         if KafkaProducer is None:
@@ -70,7 +66,6 @@ class TelemetryProducer:
             ) from exc
 
     def publish(self, topic, event, key=None):
-        """Publica un evento JSON y devuelve los metadatos de entrega."""
         future = self._producer.send(topic, value=event, key=key)
         self._producer.flush(timeout=PRODUCE_TIMEOUT_SECONDS)
         metadata = future.get(timeout=PRODUCE_TIMEOUT_SECONDS)
@@ -89,7 +84,6 @@ class TelemetryProducer:
 
 
 class TelemetryConsumer:
-    """Consumidor que lee eventos de telemetria de un topico Kafka."""
 
     def __init__(self, topic, bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS, group_id=None):
         if KafkaConsumer is None:
@@ -114,12 +108,6 @@ class TelemetryConsumer:
             ) from exc
 
     def consume(self, match=None, timeout=CONSUME_TIMEOUT_SECONDS, limit=200):
-        """Consume mensajes hasta cumplir el timeout o el limite.
-
-        Si `match` (callable sobre el value) se entrega, solo retorna los
-        registros que lo cumplen. Esto permite aislar el evento producido por el
-        test aunque el topico contenga otros mensajes.
-        """
         deadline = time.time() + timeout
         records = []
         while time.time() < deadline and len(records) < limit:

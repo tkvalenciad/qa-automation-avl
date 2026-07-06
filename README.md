@@ -33,6 +33,8 @@ Actualmente la suite cuenta con **17 pruebas automatizadas**:
 
 ---
 
+
+
 # Integración Continua (CI)
 
 El proyecto incluye un pipeline de **GitHub Actions** (`.github/workflows/ci.yml`) que se ejecuta automáticamente en cada `push` y `pull request` sobre la rama `main`.
@@ -47,6 +49,8 @@ En cada ejecución el pipeline:
 La **capa Mobile no se ejecuta en CI** de forma intencional, ya que requiere un dispositivo Android físico y Appium Server, por lo que se ejecuta localmente. De esta manera el pipeline valida de forma continua las capas reproducibles en la nube (API y eventos) sin introducir falsos negativos por falta de hardware.
 
 ---
+
+
 
 # Tecnologías utilizadas
 
@@ -67,6 +71,8 @@ La **capa Mobile no se ejecuta en CI** de forma intencional, ya que requiere un 
 
 ---
 
+
+
 # Prerrequisitos
 
 El proyecto fue desarrollado y validado utilizando estas versiones:
@@ -85,6 +91,8 @@ El proyecto fue desarrollado y validado utilizando estas versiones:
 
 
 ---
+
+
 
 # Variables de entorno
 
@@ -112,7 +120,11 @@ $env:GPS_RAW_EVENTS_TOPIC="gps-raw-events"
 
 ---
 
+
+
 # Instalación paso a paso
+
+
 
 ## 1. Clonar el repositorio
 
@@ -124,6 +136,8 @@ cd qa-automation-avl
 
 ---
 
+
+
 ## 2. Crear el entorno virtual
 
 ```
@@ -131,6 +145,8 @@ python -m venv .venv
 ```
 
 ---
+
+
 
 ## 3. Activarlo
 
@@ -148,6 +164,8 @@ source .venv/bin/activate
 
 ---
 
+
+
 ## 4. Instalar dependencias
 
 ```
@@ -155,6 +173,8 @@ pip install -r requirements.txt
 ```
 
 ---
+
+
 
 ## 5. Instalar Appium
 
@@ -165,6 +185,8 @@ appium driver install uiautomator2
 ```
 
 ---
+
+
 
 ## 6. Verificar el dispositivo Android
 
@@ -182,6 +204,8 @@ RFCY510RLSL device
 
 ---
 
+
+
 ## 7. Levantar Appium
 
 ```
@@ -189,6 +213,8 @@ appium
 ```
 
 ---
+
+
 
 ## 8. Instalar la aplicación (si es necesario)
 
@@ -198,6 +224,8 @@ adb install Android-MyDemoApp.apk
 
 ---
 
+
+
 ## 9. Levantar Kafka (solo suite de eventos)
 
 ```
@@ -206,13 +234,19 @@ docker compose up -d
 
 ---
 
+
+
 # Estructura del proyecto
 
 (Dejar exactamente el árbol que tienes actualmente)
 
 ---
 
+
+
 # Ejecución de pruebas
+
+
 
 ## Ejecutar toda la suite
 
@@ -222,6 +256,8 @@ pytest -v
 
 ---
 
+
+
 ## Ejecutar únicamente Mobile
 
 ```
@@ -229,6 +265,8 @@ pytest mobile/tests -v
 ```
 
 ---
+
+
 
 ## Ejecutar únicamente API
 
@@ -238,6 +276,8 @@ pytest api_tests/tests -v
 
 ---
 
+
+
 ## Ejecutar únicamente Eventos
 
 ```
@@ -245,6 +285,8 @@ pytest event_tests/tests -v
 ```
 
 ---
+
+
 
 # Reportes
 
@@ -262,6 +304,8 @@ Después de cada ejecución se generan automáticamente:
 
 ---
 
+
+
 ## Abrir reporte Allure
 
 ```
@@ -270,7 +314,11 @@ allure serve allure-results
 
 ---
 
+
+
 # Cobertura implementada
+
+
 
 ### Mobile
 
@@ -288,6 +336,8 @@ allure serve allure-results
 
 ---
 
+
+
 ### API
 
 ✔ POST
@@ -301,6 +351,8 @@ allure serve allure-results
 ✔ SLA
 
 ---
+
+
 
 ### Eventos
 
@@ -318,6 +370,8 @@ allure serve allure-results
 
 ---
 
+
+
 # Credenciales de prueba
 
 
@@ -328,6 +382,8 @@ allure serve allure-results
 
 
 ---
+
+
 
 # Consideraciones
 

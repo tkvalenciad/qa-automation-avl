@@ -13,9 +13,7 @@ from event_tests.schemas.telemetry_schema import GPS_EVENT_SCHEMA
 
 @pytest.mark.events
 def test_gps_telemetry_event_is_delivered_intact(publish_and_consume):
-    """Productor publica un evento GPS y el consumidor lo recibe integro."""
     event = random_gps_event()
-
     result = publish_and_consume(event)
 
     assert_delivered(result.records, expected_count=1)
@@ -25,7 +23,6 @@ def test_gps_telemetry_event_is_delivered_intact(publish_and_consume):
 
 @pytest.mark.events
 def test_consumed_event_matches_json_schema(publish_and_consume):
-    """El evento consumido cumple el contrato (JSON Schema) de telemetria."""
     result = publish_and_consume(random_gps_event())
 
     assert_delivered(result.records, expected_count=1)
@@ -34,7 +31,6 @@ def test_consumed_event_matches_json_schema(publish_and_consume):
 
 @pytest.mark.events
 def test_delivery_latency_within_sla(publish_and_consume):
-    """La latencia produce -> consume esta dentro del SLA configurado."""
     result = publish_and_consume(random_gps_event())
 
     assert_delivered(result.records, expected_count=1)
@@ -43,7 +39,6 @@ def test_delivery_latency_within_sla(publish_and_consume):
 
 @pytest.mark.events
 def test_invalid_gps_event_is_rejected_by_schema():
-    """Un evento con datos invalidos debe fallar la validacion de contrato."""
     invalid_event = build_gps_event(lat=999, lng=-74.08, speed=-5)
 
     with pytest.raises(ValidationError):

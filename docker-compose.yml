@@ -1,12 +1,3 @@
-# Kafka local ligero (Redpanda, 100% compatible con el protocolo Kafka) para la
-# capa de eventos de telemetria. Un solo contenedor, sin ZooKeeper.
-#
-# Uso:
-#   docker compose up -d
-#   pip install -r event_tests/requirements-events.txt
-#   pytest event_tests/tests -v
-#
-# El topic `gps-raw-events` se crea automaticamente al publicar el primer evento.
 services:
   redpanda:
     image: redpandadata/redpanda:v24.2.7
