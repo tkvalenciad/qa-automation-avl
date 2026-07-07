@@ -55,13 +55,13 @@ Necesito implementar la capa de mensajería solicitada en el reto utilizando Kaf
 
 **Prompt**
 
-> Actúa como un QA Automation Senior especializado en sistemas orientados a eventos.
->
-> Ayúdame a implementar paso a paso una capa de mensajería utilizando kafka-python siguiendo buenas prácticas de automatización.
->
-> La solución debe incluir productor, consumidor, payloads reutilizables, validación mediante JSON Schema, helpers para assertions y pruebas organizadas con pytest.
->
-> Evita sobreingeniería y explica cada decisión técnica antes de escribir el código.
+Actúa como un QA Automation Senior especializado en sistemas orientados a eventos.
+
+Ayúdame a implementar paso a paso una capa de mensajería utilizando kafka-python siguiendo buenas prácticas de automatización.
+
+La solución debe incluir productor, consumidor, payloads reutilizables, validación mediante JSON Schema, helpers para assertions y pruebas organizadas con pytest.
+
+Evita sobreingeniería y explica cada decisión técnica antes de escribir el código.
 
 **Valor aportado**
 
@@ -79,11 +79,11 @@ Ya tenía implementada una primera versión del bonus, pero quería asegurarme d
 
 **Prompt**
 
-> Revisa nuevamente el PDF de la prueba técnica y verifica si la implementación cumple exactamente con lo solicitado.
->
-> Si encuentras diferencias entre el código y el documento, indícalas antes de proponer cualquier cambio.
->
-> No hagas suposiciones; utiliza únicamente la información del PDF como fuente de verdad.
+Revisa nuevamente el PDF de la prueba técnica y verifica si la implementación cumple exactamente con lo solicitado.
+
+Si encuentras diferencias entre el código y el documento, indícalas antes de proponer cualquier cambio.
+
+No hagas suposiciones; utiliza únicamente la información del PDF como fuente de verdad.
 
 **Valor aportado**
 
